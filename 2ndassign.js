@@ -1,8 +1,7 @@
-var title=document.getElementById('header-title')
-//title.textContent='NEW item Listener';
-title.innerText="Items Title";
-var header=document.getElementById('main-header')
-header.style.border="yellow solid 5px "
-let element=document.getElementById('element');
-element.style.fontWeight="Bold"
-element.style.color='green'
+const items=document.getElementsByClassName('list-group-item');
+console.log(items);
+console.log(items[1])
+items[2].style.backgroundColor='green';
+for(let i=0;i<items.length;i++){
+    items[i].style.fontWeight='bold';
+}
