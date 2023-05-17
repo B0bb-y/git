@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<ul id="myList">
+  <li>Apple <button class="delete-btn">Delete</button></li>
+  <li>Banana <button class="delete-btn">Delete</button></li>
+  <li>Orange <button class="delete-btn">Delete</button></li>
+  <li>Mango <button class="delete-btn">Delete</button></li>
+</ul>
+
+<script>
+// Get all delete buttons with the "delete-btn" class
+var deleteButtons = document.getElementsByClassName("delete-btn");
+
+// Attach a click event listener to each delete button
+Array.from(deleteButtons).forEach(function(button) {
+  button.addEventListener("click", function() {
+    // Get the parent list item
+    var listItem = this.parentNode;
+
+    // Remove the parent list item from the DOM
+    listItem.parentNode.removeChild(listItem);
+  });
+});
+</script>
+
+</body>
+</html>
