@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+</head>
+<body>
+    <div>
+        <h2><strong>...Expenses...</strong></h2>
+        <form id="input" class="data">
+            <label for="amnt">Expend Amount:</label>
+            <input type="number" id="amnt" placeholder="amount"><br><br>
+            <label for="des">Expenses Description:</label>
+            <input type="text" id="des" placeholder="Description"><br><br>
+            <label for="expList">Expenses Category:</label>
+            <select id="expList">
+                <option value="exp1">Food</option>
+                <option value="exp2">Movie</option>
+                <option value="exp3">Travel</option>
+                <option value="exp4">Shopping</option>
+            </select><br><br>
+            <input type="submit" class="btn-dark" value="Add Expense">
+        </form>
+        <ul id="list">
+        </ul>
+    </div>
+
+    <script>
+        // Get reference to form and expense list
+        const form = document.getElementById('input');
+        const expenseList = document.getElementById('list');
+
+        // Load expenses from local storage
+        let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+        // Function to render expenses
+        function renderExpenses() {
+            // Clear expense list
+            expenseList.innerHTML = '';
+
+            // Loop through expenses and create list items
+            expenses.forEach((expense, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    Amount: $${expense.amount} | Description: ${expense.description} | Category: ${expense.category}
+                    <button onclick="editExpense(${index})">Edit</button>
+                    <button onclick="deleteExpense(${index})">Delete</button>
+                `;
+                expenseList.appendChild(li);
+            });
+        }
+
+        // Function to add expense
+        function addExpense(event) {
+            event.preventDefault();
+
+            // Get input values
+            const amount = document.getElementById('amnt').value;
+            const description = document.getElementById('des').value;
+            const category = document.getElementById('expList').value;
+
+            // Create expense object
+            const expense = {
+                amount: amount,
+                description: description,
+                category: category
+            };
+
+            // Add expense to expenses array
+            expenses.push(expense);
+
+            // Update local storage
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+
+            // Render expenses
+            renderExpenses();
+
+            // Reset form
+            form.reset();
+        }
+
+        // Function to edit expense
+        function editExpense(index) {
+            // Get current expense
+            const currentExpense = expenses[index];
+
+            // Prompt user for new values
+            const newAmount = prompt('Enter new amount:', currentExpense.amount);
+            const newDescription = prompt('Enter new description:', currentExpense.description);
+            const newCategory = prompt('Enter new category:', currentExpense.category);
+
+            // Update expense if new values are provided
+            if (newAmount !== null && newDescription !== null && newCategory !== null) {
+                currentExpense.amount = newAmount;
+                currentExpense.description = newDescription;
+                currentExpense.category = newCategory;
+
+                // Update local storage
+                localStorage.setItem('expenses', JSON.stringify(expenses));
+
+                // Render expenses
+                renderExpenses();
+            }
+        }
+
+        // Function to delete expense
+        function deleteExpense(index) {
+            // Confirm deletion
+            if (confirm('Are you sure you want to delete this expense?')) {
+                // Remove expense from expenses array
+                expenses.splice(index, 1);
+
+                // Update local storage
+                localStorage.setItem('expenses', JSON.stringify(expenses));
+
+                // Render expenses
+                renderExpenses();
+            }
+        }
+
+        // Add event listener to form submit
+        form.addEventListener('submit', addExpense);
+
+        // Initial render of expenses
+        renderExpenses();
+    </script>
+</body>
+</html>
